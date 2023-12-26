@@ -11,9 +11,9 @@ const setCardName = (name: string) => {
 </script>
 
 <template>
-  <div class="h-screen overflow-hidden">
+  <div class="h-screen overflow-hidden flex flex-col">
     <Filter @name-change="setCardName"/>
-    <Deck class="h-dvh"></Deck>
+    <Deck></Deck>
   </div>
 
 </template>
