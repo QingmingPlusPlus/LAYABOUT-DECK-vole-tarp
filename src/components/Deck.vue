@@ -1,56 +1,33 @@
 <script setup lang="ts">
-import {Card, getCardList} from "../data/getCardList";
-import {onMounted, onUnmounted, ref} from "vue";
+import {defineProps} from "vue";
+import {Card} from "../data/getCardList.ts";
 
-
-const MIN_BOTTOM_GAP = 5
-const allCardList: Card[] = []
-const cardList = ref<Card[]>([])
-const boxDom = ref<HTMLDivElement | null>(null)
-
-let pageNo = 0
-const pageSize = ref(10)
-
-function handleScroll(e: Event) {
-  const target = e.target as HTMLDivElement
-  if (target.scrollHeight - target.scrollTop - target.clientHeight < MIN_BOTTOM_GAP) {
-    pageNo +=1
-    loadNextPage()
+defineProps({
+  cardList: {
+    type: Array,
+    required: true,
+    default: []
   }
+});
+
+const emit = defineEmits(['empty','remove'])
+
+function handleEmptyButtonClick() {
+  emit('empty')
 }
-
-/**
- * 懒加载方法：加载下一页
- * SideEffect
- */
-function loadNextPage() {
-  const start = pageNo * pageSize.value
-  const end = start + pageSize.value
-
-  cardList.value.push(...allCardList.slice(start, end))
+function  handleCardClick(idx:number) {
+  emit('remove',idx)
 }
-
-getCardList().then(res => {
-  allCardList.push(...res as Card[]
-)
-  loadNextPage()
-})
-
-
-onMounted(() => {
-  boxDom.value?.addEventListener('scroll', handleScroll)
-})
-onUnmounted(() => {
-  boxDom.value?.removeEventListener('scroll', handleScroll)
-})
-
-
 </script>
 
 <template>
-  <div ref="boxDom" class=" overflow-auto flex-grow flex flex-row flex-wrap justify-start items-start bg-amber-500">
-    <div v-for="card in cardList" :key="card.image" class="m-2 flex-grow-0">
-      <img :src="card.image" :alt="card.name">
+  <div class="h-full overflow-auto">
+    <button @click="handleEmptyButtonClick" class="rounded border-gray-500 border-2 px-2 py-1">清空</button>
+    <div class="flex flex-wrap flex-row">
+      <img v-for="(card,idx) in cardList" :src="(card as Card).image" :key="(card as Card).image"
+           :alt="(card as Card).name" @click="handleCardClick(idx)"
+           class="m-2 w-1/3">
     </div>
+
   </div>
 </template>

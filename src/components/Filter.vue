@@ -6,9 +6,12 @@ const emit = defineEmits(["name-change"])
 
 const cardName = ref("");
 const onCardNameChange = _.debounce(() => {
-  emit("name-change",cardName.value)
+  emit("name-change", cardName.value)
 }, 500)
-
+const clearInput = () => {
+  cardName.value = ''
+  onCardNameChange()
+}
 </script>
 
 <template>
@@ -18,5 +21,6 @@ const onCardNameChange = _.debounce(() => {
       <input v-model="cardName" type="text" @input="onCardNameChange"
              class="border-2 border-gray-400 outline-1 rounded-xl pl-2">
     </label>
+    <button @click="clearInput">清空</button>
   </div>
 </template>
