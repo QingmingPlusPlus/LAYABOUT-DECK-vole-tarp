@@ -49,6 +49,25 @@ function calcSizeGen(cardWidth: number, cardHeight: number) {
 
 const calcPageSize: (width: number, height: number) => number = calcSizeGen(CARD_WIDTH, CARD_HEIGHT)
 
+const loadAllPageData = (name?: string) => {
+  return new Promise<void>(resolve => {
+    allCardList.length = 0;
+    cardList.value.length = 0;
+    pageNo = 0;
+    pageSize = calcPageSize(boxDom.value?.clientWidth || 0, boxDom.value?.clientHeight || 0)
+
+    getCardList({name})
+        .then(res => {
+          allCardList.push(...res)
+          loadNextPage()
+        })
+        .finally(() => {
+          resolve()
+        })
+  })
+}
+
+
 function loadNextPage() {
   const start = pageNo * pageSize
   const end = start + pageSize
@@ -69,6 +88,7 @@ onMounted(async () => {
   resizeObserver = new ResizeObserver(handlePageResize)
   resizeObserver.observe(boxDom.value)
 
+  await loadAllPageData()
 
 })
 onUnmounted(() => {
@@ -83,21 +103,8 @@ onUnmounted(() => {
 })
 watch(
     () => props.name,
-    (name) => {
-
-      allCardList.length = 0;
-      cardList.value.length = 0;
-      pageNo = 0;
-      pageSize = calcPageSize(boxDom.value?.clientWidth || 0, boxDom.value?.clientHeight || 0)
-
-      getCardList({name})
-          .then(res => {
-            allCardList.push(...res)
-            loadNextPage()
-          })
-
-    },
-    {immediate: true}
+    loadAllPageData,
+    {immediate: false}
 )
 </script>
 

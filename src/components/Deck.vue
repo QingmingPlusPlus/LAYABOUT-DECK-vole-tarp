@@ -10,14 +10,16 @@ defineProps({
   }
 });
 
-const emit = defineEmits(['empty','remove'])
+const emit = defineEmits(['empty', 'remove'])
 
 function handleEmptyButtonClick() {
   emit('empty')
 }
-function  handleCardClick(idx:number) {
-  emit('remove',idx)
+
+function handleCardClick(idx: number) {
+  emit('remove', idx)
 }
+
 </script>
 
 <template>

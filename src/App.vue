@@ -13,6 +13,7 @@ const setCardName = (name: string) => {
 
 const addCard = (card: Card) => {
   selectedCardList.value.push(card)
+  selectedCardList.value.sort((a, b) => a.name.localeCompare(b.name))
 }
 const emptyDeck = () => {
   selectedCardList.value = []
@@ -31,7 +32,6 @@ const delCardByIdx = (idx: number) => {
       <Deck class="w-1/3 bg-red-300" :card-list="selectedCardList" @empty="emptyDeck" @remove="delCardByIdx"></Deck>
     </div>
   </div>
-
 </template>
 
 <style scoped>

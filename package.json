@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "jspdf": "^2.5.1",
     "lodash": "^4.17.21",
     "vue": "^3.3.4"
   },
