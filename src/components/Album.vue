@@ -77,7 +77,6 @@ function loadNextPage() {
 onMounted(async () => {
 
   if (!boxDom.value) {
-    console.warn('DOOOOOOM!!')
     return
   }
 
